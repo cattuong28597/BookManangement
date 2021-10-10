@@ -44,10 +44,11 @@ public class Menu {
             System.out.println("Menu:");
             System.out.println("   1. Nhấn 1 để xem thông tin người mượn");
             System.out.println("   2. Nhấn 2 để xem kho sách");
-            System.out.println("   3. Nhấn 3 để thêm sách");
-            System.out.println("   4. Nhấn 4 để sửa thông tin sách");
-            System.out.println("   5. Nhấn 5 để cho mượn sách");
-            System.out.println("   6. Nhấn X để trở về Menu chính");
+            System.out.println("   3. Nhấn 3 để tìm sách");
+            System.out.println("   4. Nhấn 4 để thêm sách");
+            System.out.println("   5. Nhấn 5 để sửa thông tin sách");
+            System.out.println("   6. Nhấn 6 để xóa sách");
+            System.out.println("   7. Nhấn 7 để trở về Menu chính");
             System.out.println("=================================================");
             System.out.print("Nhập lựa chọn của bạn: ");
             choice = input.nextLine();
@@ -59,15 +60,18 @@ public class Menu {
                     admin.readBooks();
                     break;
                 case "3":
-                    admin.addBook();
+                    admin.searchBooks();
                     break;
                 case "4":
-
+                    admin.addBook();
                     break;
                 case "5":
-
+                    admin.fixBookInfo();
                     break;
-                case  "6":
+                case "6":
+                    admin.DeleteBookInfo();
+                    break;
+                case  "7":
                     mainMenu();
                     break;
                 default:

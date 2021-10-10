@@ -33,7 +33,7 @@ public class Admin {
             System.out.println("   3. Nhấn 3 để tìm sách");
             System.out.println("   4. Nhấn 4 để thêm sách");
             System.out.println("   5. Nhấn 5 để sửa thông tin sách");
-            System.out.println("   6. Nhấn 6 để cho mượn sách");
+            System.out.println("   6. Nhấn 6 để xóa sách");
             System.out.println("   7. Nhấn 7 để trở về Menu chính");
             System.out.println("=================================================");
             System.out.print("Nhập lựa chọn của bạn: ");
@@ -52,10 +52,10 @@ public class Admin {
                     addBook();
                     break;
                 case "5":
-
+                    fixBookInfo();
                     break;
                 case "6":
-
+                    DeleteBookInfo();
                     break;
                 case  "7":
                     menu.mainMenu();
@@ -163,7 +163,6 @@ public class Admin {
         }
     }
 
-
     public void searchBooks(){
         System.out.println("=================================================");
         System.out.print("Nhập sách bạn cần tìm: ");
@@ -201,6 +200,230 @@ public class Admin {
                 e.printStackTrace();
             }
         }
+    }
+    // Sửa sách
+    public void fixBookInfo(){
+        BufferedReader br = null;
+        try {
+            String line;
+            ArrayList<Book> listBook = new ArrayList<Book>();
+            br = new BufferedReader(new FileReader("src\\data\\Books.csv"));
+            int count = 1;
+            while ((line = br.readLine()) != null) {
+                readWriteCSVFile.PrintBook(readWriteCSVFile.parseCsvLine(line),count);
+                List<String> bookLine = readWriteCSVFile.parseCsvLine(line);
+                listBook.add(new Book(bookLine.get(0),bookLine.get(1),Long.valueOf(bookLine.get(2))));
+                count++;
+            }
+            System.out.println("=================================================");
+            if(listBook.size()!=0){
+                System.out.print("Nhập số thứ tự sách cần chỉnh sửa :");
+                Scanner input = new Scanner(System.in);
+                int inputIndexBook = input.nextInt();
+                System.out.println("=================================================");
+                System.out.println("Tên sách cần sửa : "+listBook.get(inputIndexBook-1).getName()+", tác giả : "+listBook.get(inputIndexBook-1).getAuthor()+", giá tiền : "+listBook.get(inputIndexBook-1).getPrice());
+                Scanner input2 = new Scanner(System.in);
+                System.out.print("Nhập tên sách chỉnh sửa : ");
+                String inputBookName = input2.nextLine();
+                System.out.print("Nhập tác giả : ");
+                String inputAuthor = input2.nextLine();
+                System.out.print("Nhập giá tiền : ");
+                String inputPrice = input2.nextLine();
+                listBook.get(inputIndexBook-1).setName(inputBookName);
+                listBook.get(inputIndexBook-1).setAuthor(inputAuthor);
+                listBook.get(inputIndexBook-1).setPrice(Long.valueOf(inputPrice));
+                System.out.println("=================================================");
+                System.out.println("Danh sach sau khi chinh sua");
+                for(int i=0;i<listBook.size();i++){
+                    System.out.println((i+1)+". "+listBook.get(i));
+                }
+                System.out.println("=================================================");
+                confirmBookChange(listBook);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void confirmBookChange(ArrayList<Book> books) {
+        Menu menu = new Menu();
+        String choice = "a";
+        Scanner input = new Scanner(System.in);
+        do {
+            System.out.println("Xác nhận:");
+            System.out.println("   1. Nhấn 1 để xác nhận lưu thay đổi");
+            System.out.println("   2. Nhấn 2 để thoát");
+            System.out.println("=================================================");
+            System.out.print("Nhập lựa chọn của bạn: ");
+            choice = input.nextLine();
+            switch (choice) {
+                case "1":
+                    saveChangeValueBookToCSV(books);
+                    break;
+                case "2":
+                    menu.customerMenu();
+                    break;
+                default:
+                    System.out.println("Bạn nhập sai chức năng");
+                    System.out.println("Bấm nút theo menu để tiêp tục");
+                    System.out.println("=================================================");
+            }
+        } while (choice != "2");
+    }
+
+    public void saveChangeValueBookToCSV(ArrayList<Book> books) {
+        Menu menu = new Menu();
+        String fileName = "src/data/Books.csv";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            FileWriter writer = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            bufferedWriter.write(books.get(0).getName());
+            bufferedWriter.write(";");
+            bufferedWriter.write(books.get(0).getAuthor());
+            bufferedWriter.write(";");
+            String price = String.valueOf(books.get(0).getPrice());
+            bufferedWriter.write(price);
+            bufferedWriter.write(";");
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(int i=1;i<books.size();i++){
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(fileName));
+                FileWriter writer = new FileWriter(fileName,true);
+                BufferedWriter bufferedWriter = new BufferedWriter(writer);
+                bufferedWriter.write("\n");
+                bufferedWriter.write(books.get(i).getName());
+                bufferedWriter.write(";");
+                bufferedWriter.write(books.get(i).getAuthor());
+                bufferedWriter.write(";");
+                String price = String.valueOf(books.get(i).getPrice());
+                bufferedWriter.write(price);
+                bufferedWriter.write(";");
+                bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("=================================================");
+        System.out.println("Sửa sách thành công");
+        System.out.println("=================================================");
+        menu.adminMenu();
+    }
+
+    //Xóa sách
+
+    public void DeleteBookInfo(){
+        BufferedReader br = null;
+        try {
+            String line;
+            ArrayList<Book> listBook = new ArrayList<Book>();
+            br = new BufferedReader(new FileReader("src\\data\\Books.csv"));
+            int count = 1;
+            while ((line = br.readLine()) != null) {
+                readWriteCSVFile.PrintBook(readWriteCSVFile.parseCsvLine(line),count);
+                List<String> bookLine = readWriteCSVFile.parseCsvLine(line);
+                listBook.add(new Book(bookLine.get(0),bookLine.get(1),Long.valueOf(bookLine.get(2))));
+                count++;
+            }
+            System.out.println("=================================================");
+            if(listBook.size()!=0){
+                System.out.print("Nhập số thứ tự sách cần xóa :");
+                Scanner input = new Scanner(System.in);
+                int inputIndexBook = input.nextInt();
+                System.out.println("=================================================");
+                listBook.remove(inputIndexBook-1);
+                confirmBookDelete(listBook);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void confirmBookDelete(ArrayList<Book> books) {
+        Menu menu = new Menu();
+        String choice = "a";
+        Scanner input = new Scanner(System.in);
+        do {
+            System.out.println("Xác nhận:");
+            System.out.println("   1. Nhấn 1 để xác nhận xóa");
+            System.out.println("   2. Nhấn 2 để thoát");
+            System.out.println("=================================================");
+            System.out.print("Nhập lựa chọn của bạn: ");
+            choice = input.nextLine();
+            switch (choice) {
+                case "1":
+                    saveChangeAfterDelete(books);
+                    break;
+                case "2":
+                    menu.customerMenu();
+                    break;
+                default:
+                    System.out.println("Bạn nhập sai chức năng");
+                    System.out.println("Bấm nút theo menu để tiêp tục");
+                    System.out.println("=================================================");
+            }
+        } while (choice != "2");
+    }
+
+    public void saveChangeAfterDelete(ArrayList<Book> books) {
+        Menu menu = new Menu();
+        String fileName = "src/data/Books.csv";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            FileWriter writer = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            bufferedWriter.write(books.get(0).getName());
+            bufferedWriter.write(";");
+            bufferedWriter.write(books.get(0).getAuthor());
+            bufferedWriter.write(";");
+            String price = String.valueOf(books.get(0).getPrice());
+            bufferedWriter.write(price);
+            bufferedWriter.write(";");
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(int i=1;i<books.size();i++){
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(fileName));
+                FileWriter writer = new FileWriter(fileName,true);
+                BufferedWriter bufferedWriter = new BufferedWriter(writer);
+                bufferedWriter.write("\n");
+                bufferedWriter.write(books.get(i).getName());
+                bufferedWriter.write(";");
+                bufferedWriter.write(books.get(i).getAuthor());
+                bufferedWriter.write(";");
+                String price = String.valueOf(books.get(i).getPrice());
+                bufferedWriter.write(price);
+                bufferedWriter.write(";");
+                bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("=================================================");
+        System.out.println("Đã xóa sách thành công");
+        System.out.println("=================================================");
+        menu.adminMenu();
     }
 }
 

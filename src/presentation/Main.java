@@ -16,7 +16,7 @@ public class Main {
             System.out.println("Menu:");
             System.out.println("   1. Nhấn 1 để truy cập vào Thư viện sách");
             System.out.println("   2. Nhấn 2 để truy cập vào quyền Admin");
-            System.out.println("   3. Nhấn X để thoát");
+            System.out.println("   3. Nhấn 3 để thoát");
             System.out.println("=================================================");
             System.out.print("Nhập lựa chọn của bạn: ");
             choice = input.nextLine();
