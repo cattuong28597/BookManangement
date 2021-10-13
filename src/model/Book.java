@@ -11,6 +11,13 @@ public class Book {
         this.price = price;
     }
 
+    public Book(String raw) {
+        String[] fields = raw.split(";");
+        this.name = fields[0];
+        this.author = fields[1];
+        this.price = Long.parseLong(fields[2]);
+    }
+
     public String getName() {
         return name;
     }
@@ -37,8 +44,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return "name:'" + name + '\'' +
-                ", author:'" + author + '\'' +
-                ", price:" + price;
+        return String.format("%s;%s;%d", name, author, price);
     }
 }

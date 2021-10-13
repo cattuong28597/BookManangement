@@ -71,7 +71,7 @@ public class Admin {
         BufferedReader br = null;
         try {
             String line;
-            br = new BufferedReader(new FileReader("src\\data\\ThongTinMuonSach.csv"));
+            br = new BufferedReader(new FileReader("src\\data\\SaleInformation.csv"));
             int count = 1;
             while ((line = br.readLine()) != null) {
                 List<String> bookLine = readWriteCSVFile.parseCsvLine(line);

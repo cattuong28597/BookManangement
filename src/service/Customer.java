@@ -85,9 +85,9 @@ public class Customer {
 
     public void addBorrowInformation(Book book, CustomerInformation customer){
         Menu menu = new Menu();
-        String fileName = "src\\data\\ThongTinMuonSach.csv";
+        String fileName = "src\\data\\SaleInformation.csv";
         try{
-            BufferedReader br = new BufferedReader(new FileReader("src\\data\\ThongTinMuonSach.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("src\\data\\SaleInformation.csv"));
             FileWriter writer = new FileWriter(fileName,true);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             if(br.readLine()==null){
