@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Admin {
     private ReadWriteCSVFile readWriteCSVFile = new ReadWriteCSVFile();
-    public void checkAdmin(){
+    public void checkAdmin() throws IOException {
         System.out.println("=================================================");
         Scanner input = new Scanner(System.in);
         System.out.println("Mời bạn nhập mã để truy cập quyên admin : ");
@@ -22,7 +22,7 @@ public class Admin {
         adminMenu();
     }
 
-    public void adminMenu(){
+    public void adminMenu() throws IOException {
         Menu menu = new Menu();
         String choice = "a";
         Scanner input = new Scanner(System.in);
@@ -76,7 +76,7 @@ public class Admin {
             while ((line = br.readLine()) != null) {
                 List<String> bookLine = readWriteCSVFile.parseCsvLine(line);
                 Book book = new Book(bookLine.get(3),bookLine.get(4),Long.valueOf(bookLine.get(5)));
-                CustomerInformation customerInfo = new CustomerInformation(bookLine.get(0),bookLine.get(1),bookLine.get(2));
+                CustomerInformation customerInfo = new CustomerInformation(bookLine.get(0),bookLine.get(1),bookLine.get(2),bookLine.get(6));
                 readWriteCSVFile.PrintCustomerAndBook(book,customerInfo,count);
                 count ++;
             }
@@ -253,7 +253,7 @@ public class Admin {
         }
     }
 
-    public void confirmBookChange(ArrayList<Book> books) {
+    public void confirmBookChange(ArrayList<Book> books) throws IOException {
         Menu menu = new Menu();
         String choice = "a";
         Scanner input = new Scanner(System.in);
@@ -279,7 +279,7 @@ public class Admin {
         } while (choice != "2");
     }
 
-    public void saveChangeValueBookToCSV(ArrayList<Book> books) {
+    public void saveChangeValueBookToCSV(ArrayList<Book> books) throws IOException {
         Menu menu = new Menu();
         String fileName = "src/data/Books.csv";
         try {
@@ -358,7 +358,7 @@ public class Admin {
         }
     }
 
-    public void confirmBookDelete(ArrayList<Book> books) {
+    public void confirmBookDelete(ArrayList<Book> books) throws IOException {
         Menu menu = new Menu();
         String choice = "a";
         Scanner input = new Scanner(System.in);
@@ -385,7 +385,7 @@ public class Admin {
     }
 
 
-    public void saveChangeAfterDelete(ArrayList<Book> books) {
+    public void saveChangeAfterDelete(ArrayList<Book> books) throws IOException {
         Menu menu = new Menu();
         String fileName = "src/data/Books.csv";
         try {

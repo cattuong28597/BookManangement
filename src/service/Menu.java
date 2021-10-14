@@ -1,32 +1,32 @@
 package service;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 
 public class Menu {
     private Customer customer = new Customer();
     private Admin admin = new Admin();
-    public void mainMenu(){
+    public void mainMenu() throws IOException {
         String choice = "a";
         Scanner input = new Scanner(System.in);
-        System.out.println("Thư viện Cát Tường xin chào quý khách");
+        System.out.println("Chào mừng bạn đến với BookCorner");
         do {
             System.out.println("Menu:");
             System.out.println("   1. Nhấn 1 để truy cập vào Thư viện sách");
             System.out.println("   2. Nhấn 2 để truy cập vào quyền Admin");
-            System.out.println("   3. Nhấn X để thoát");
+            System.out.println("   3. Nhấn 3 để thoát");
             System.out.println("=================================================");
             System.out.print("Nhập lựa chọn của bạn: ");
             choice = input.nextLine();
             switch (choice) {
                 case "1":
-                    customer.customerMenu();
+                    customerMenu();
                     break;
                 case "2":
                     admin.checkAdmin();
                     break;
                 case "3":
-
                     System.exit(0);
                     break;
                 default:
@@ -34,15 +34,15 @@ public class Menu {
                     System.out.println("Bấm nút theo menu để tiêp tục");
                     System.out.println("=================================================");
             }
-        } while ((choice != "2"));
+        } while ((choice != "3"));
     }
 
-    public void adminMenu(){
+    public void adminMenu() throws IOException {
         String choice = "a";
         Scanner input = new Scanner(System.in);
         do {
             System.out.println("Menu:");
-            System.out.println("   1. Nhấn 1 để xem thông tin người mượn");
+            System.out.println("   1. Nhấn 1 để xem thông tin người mua");
             System.out.println("   2. Nhấn 2 để xem kho sách");
             System.out.println("   3. Nhấn 3 để tìm sách");
             System.out.println("   4. Nhấn 4 để thêm sách");
@@ -79,10 +79,10 @@ public class Menu {
                     System.out.println("Bấm nút theo menu để tiêp tục");
                     System.out.println("=================================================");
             }
-        } while ((choice != "2"));
+        } while ((choice != "7"));
     }
 
-    public void customerMenu(){
+    public void customerMenu() throws IOException {
         String choice = "a";
         Scanner input = new Scanner(System.in);
         do {
@@ -108,6 +108,6 @@ public class Menu {
                     System.out.println("Bấm nút theo menu để tiêp tục");
                     System.out.println("=================================================");
             }
-        } while ((choice != "2"));
+        } while ((choice != "3"));
     }
 }

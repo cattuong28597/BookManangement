@@ -3,15 +3,16 @@ package presentation;
 import service.Admin;
 import service.Customer;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Customer customer = new Customer();
         Admin admin = new Admin();
         String choice = "a";
         Scanner input = new Scanner(System.in);
-        System.out.println("Thư viện Cát Tường xin chào quý khách");
+        System.out.println("Chào mừng bạn đến với BookCorner");
         do {
             System.out.println("Menu:");
             System.out.println("   1. Nhấn 1 để truy cập vào Thư viện sách");

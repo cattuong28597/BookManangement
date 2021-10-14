@@ -2,88 +2,57 @@ package service;
 
 import model.Book;
 import model.CustomerInformation;
+import repository.BookRepository;
 import writeReadFile.ReadWriteCSVFile;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Customer {
+    public static Scanner input = new Scanner(System.in);
     private ReadWriteCSVFile readWriteCSVFile = new ReadWriteCSVFile();
-    public void customerMenu(){
+    BookRepository bookRepository = new BookRepository();
+
+    public void customerMenu() throws IOException {
         Menu menu = new Menu();
-        String choice = "a";
-        Scanner input = new Scanner(System.in);
-        do {
-            System.out.println("Menu:");
-            System.out.println("   1. Nhấn 1 để xem sách");
-            System.out.println("   2. Nhấn 2 để tìm sách");
-            System.out.println("   3. Nhấn 3 để thoát");
-            System.out.println("=================================================");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            choice = input.nextLine();
-            switch (choice) {
-                case "1":
-                    showBooks();
-                    break;
-                case "2":
-                    searchBooks();
-                    break;
-                case  "3":
-                    menu.mainMenu();
-                    break;
-                default:
-                    System.out.println("Bạn nhập sai chức năng");
-                    System.out.println("Bấm nút theo menu để tiêp tục");
-                    System.out.println("=================================================");
-            }
-        } while ((choice != "2"));
+        menu.customerMenu();
     }
 
-    public void searchBooks(){
+    public void showBooks() throws IOException {
+       ArrayList<Book> books = new ArrayList<>(bookRepository.getBooks());
+        for (int i = 0; i < books.size(); i++) {
+            System.out.println(i+1+"."+books.get(i));
+        }
+        confirmBuy(books);
+    }
+
+    public void searchBooks() throws IOException {
         System.out.println("=================================================");
         System.out.print("Nhập sách bạn cần tìm: ");
         Scanner input = new Scanner(System.in);
         String searchCharacter = input.nextLine();
-        ArrayList<Book> listBook = new ArrayList<Book>();
-        BufferedReader br = null;
-        try {
-            String line;
-            br = new BufferedReader(new FileReader("src\\data\\Books.csv"));
-            while ((line = br.readLine()) != null) {
-                List<String> csvLine = readWriteCSVFile.parseCsvLine(line);
-                if(csvLine.get(0).contains(searchCharacter)){
-                    Book book = new Book(csvLine.get(0),csvLine.get(1),Long.valueOf(csvLine.get(2)));
-                    listBook.add(book);
-                }
-            }
-            if(listBook.size()==0){
-                System.out.println("Sách tìm kiếm không tồn tại");
-            }
-            else{
-                for(int i=0;i<listBook.size();i++){
-                    System.out.println((i+1)+". "+listBook.get(i));
-                }
-                System.out.println("=================================================");
-                confirmBorrow(listBook);
-            }
-            System.out.println("=================================================");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        ArrayList<Book> books = new ArrayList<Book>(bookRepository.getBooks());
+        ArrayList<Book> bookAfterSearch = new ArrayList<>();
+        for (Book book: bookAfterSearch) {
+            if (book.getName().contains(searchCharacter)) {
+                bookAfterSearch.add(book);
             }
         }
+        if (bookAfterSearch.size() == 0) {
+            System.out.println("Không có sách cần tìm khiếm.");
+        } else {
+            for (Book bookSearch: bookAfterSearch) {
+                System.out.println(bookSearch);
+            }
+        }
+        confirmBuy(bookAfterSearch);
     }
 
 
-    public void addBorrowInformation(Book book, CustomerInformation customer){
+    public void SaleBookInformation(Book book, CustomerInformation customer){
         Menu menu = new Menu();
         String fileName = "src\\data\\SaleInformation.csv";
         try{
@@ -104,6 +73,7 @@ public class Customer {
                 String price = String.valueOf(book.getPrice());
                 bufferedWriter.write(price);
                 bufferedWriter.write(";");
+                bufferedWriter.write(customer.getDate());
                 System.out.println("Quý khách đã đặt sách thành công");
                 System.out.println("=================================================");
             }
@@ -132,49 +102,22 @@ public class Customer {
         }
     }
 
-    public void showBooks() {
-        BufferedReader br = null;
-        try {
-            String line;
-            br = new BufferedReader(new FileReader("src\\data\\Books.csv"));
-            int count = 1;
-            ArrayList<Book> listBook = new ArrayList<Book>();
-            while ((line = br.readLine()) != null) {
-                readWriteCSVFile.PrintBook(readWriteCSVFile.parseCsvLine(line),count);
-                List<String> bookLine = readWriteCSVFile.parseCsvLine(line);
-                listBook.add(new Book(bookLine.get(0),bookLine.get(1),Long.valueOf(bookLine.get(2))));
-                count++;
-            }
-            System.out.println("=================================================");
-            confirmBorrow(listBook);
-            System.out.println("=================================================");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
-    public void confirmBorrow(ArrayList<Book> books){
+
+    public void confirmBuy(ArrayList<Book> books) throws IOException {
         Menu menu = new Menu();
         String choice = "a";
         Scanner input = new Scanner(System.in);
         do {
             System.out.println("Xác nhận:");
-            System.out.println("   1. Nhấn 1 để mượn sách");
-            System.out.println("   2. Nhấn 2 để thoát");
+            System.out.println("   1. Nhấn 1 để đặt mua sách");
+            System.out.println("   2. Nhấn 2 để hủy");
             System.out.println("=================================================");
             System.out.print("Nhập lựa chọn của bạn: ");
             choice = input.nextLine();
             switch (choice) {
                 case "1":
-                    borrowBook(books);
+                    buyBook(books);
                     break;
                 case "2":
                     menu.customerMenu();
@@ -187,7 +130,7 @@ public class Customer {
         } while (choice != "2");
     }
 
-    public void borrowBook(ArrayList<Book> books){
+    public void buyBook(ArrayList<Book> books) throws IOException {
         if(books.size()!=0){
             for(int i=0;i<books.size();i++){
                 System.out.println((i+1)+". "+books.get(i));
@@ -200,41 +143,74 @@ public class Customer {
         }
     }
 
-    public void createCustomerInfo(Book book){
+    public boolean isFormatNameCustomer(String name) {
+        String REGEXT_NAME = "^([A-Z]+[a-z]*[ ]?)+$";
+        Pattern pattern = Pattern.compile(REGEXT_NAME);
+        Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
+    }
+
+    public boolean isFormatPhoneCustomer(String phone) {
+        String REGEXT_PHONE = "^[0][1-9][0-9]{8}$";
+        Pattern pattern = Pattern.compile(REGEXT_PHONE);
+        Matcher matcher = pattern.matcher(phone);
+        return matcher.matches();
+    }
+
+    public void createCustomerInfo(Book book) throws IOException {
+        String inputNameCustomer;
+        String inputAddressBorrow;
+        String inputPhoneNumberCustomer;
+        String dateBuy;
         System.out.println("Sách mượn : "+ book.getName()+", tác giả : "+ book.getAuthor()+", giá tiền : "+ book.getPrice());
-        System.out.print("Nhập tên người mượn : ");
-        Scanner input = new Scanner(System.in);
-        String inputNameCustomer = input.nextLine();
+        do {
+            System.out.print("Nhập tên người mượn : ");
+            inputNameCustomer = input.nextLine();
+            if (!isFormatNameCustomer(inputNameCustomer)) {
+                System.out.println("Không đúng định dạng (Mẫu: Nguyen Van A)");
+            }
+        } while (!isFormatNameCustomer(inputNameCustomer));
+
+
         System.out.print("Nhập địa chỉ : ");
-        String inputAddressBorrow = input.nextLine();
-        System.out.print("Nhập số điện thoại : ");
-        String inputPhoneNumberBorrow = input.nextLine();
+        inputAddressBorrow = input.nextLine();
+
+        do {
+            System.out.print("Nhập số điện thoại : ");
+            inputPhoneNumberCustomer = input.nextLine();
+            if (!isFormatPhoneCustomer(inputPhoneNumberCustomer)) {
+                System.out.println("Không đúng định dạng (Mẫu: 0123456789)");
+            }
+        } while (!isFormatPhoneCustomer(inputPhoneNumberCustomer));
+
+        dateBuy = String.valueOf(java.time.LocalDate.now());
+
         System.out.println("=================================================");
-        CustomerInformation customerInfo = new CustomerInformation(inputNameCustomer,inputAddressBorrow,inputPhoneNumberBorrow);
+        CustomerInformation customerInfo = new CustomerInformation(inputNameCustomer,inputAddressBorrow,inputPhoneNumberCustomer, dateBuy);
         confirmBook(book,customerInfo);
     }
 
-    public void confirmBook(Book book,CustomerInformation customer){
+    public void confirmBook(Book book,CustomerInformation customer) throws IOException {
         Menu menu = new Menu();
         String choice = "a";
         Scanner input = new Scanner(System.in);
         do {
             System.out.println("Xác nhận:");
-            System.out.println("   1. Nhấn 1 để xác nhận mượn sách");
+            System.out.println("   1. Nhấn 1 để xác nhận mua sách");
             System.out.println("   2. Nhấn 2 để thoát");
             System.out.println("=================================================");
             System.out.print("Nhập lựa chọn của bạn: ");
             choice = input.nextLine();
             switch (choice) {
                 case "1":
-                    addBorrowInformation(book,customer);
+                    SaleBookInformation(book,customer);
                     break;
                 case "2":
                     menu.customerMenu();
                     break;
                 default:
                     System.out.println("Bạn nhập sai chức năng");
-                    System.out.println("Bấm nút theo menu để tiêp tục");
+                    System.out.println("Bấm nút theo menu để tiếp tục");
                     System.out.println("=================================================");
             }
         } while (choice != "2");
