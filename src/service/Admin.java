@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Admin {
+
     private ReadWriteCSVFile readWriteCSVFile = new ReadWriteCSVFile();
     public void checkAdmin() throws IOException {
         System.out.println("=================================================");
@@ -21,51 +22,51 @@ public class Admin {
         }
         adminMenu();
     }
-
     public void adminMenu() throws IOException {
         Menu menu = new Menu();
-        String choice = "a";
-        Scanner input = new Scanner(System.in);
-        do {
-            System.out.println("Menu:");
-            System.out.println("   1. Nhấn 1 để xem thông tin người mượn");
-            System.out.println("   2. Nhấn 2 để xem kho sách");
-            System.out.println("   3. Nhấn 3 để tìm sách");
-            System.out.println("   4. Nhấn 4 để thêm sách");
-            System.out.println("   5. Nhấn 5 để sửa thông tin sách");
-            System.out.println("   6. Nhấn 6 để xóa sách");
-            System.out.println("   7. Nhấn 7 để trở về Menu chính");
-            System.out.println("=================================================");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            choice = input.nextLine();
-            switch (choice) {
-                case "1":
-                    readBorrowInformation();
-                    break;
-                case "2":
-                    readBooks();
-                    break;
-                case "3":
-                    searchBooks();
-                    break;
-                case "4":
-                    addBook();
-                    break;
-                case "5":
-                    fixBookInfo();
-                    break;
-                case "6":
-                    DeleteBookInfo();
-                    break;
-                case  "7":
-                    menu.mainMenu();
-                    break;
-                default:
-                    System.out.println("Bạn nhập sai chức năng");
-                    System.out.println("Bấm nút theo menu để tiêp tục");
-                    System.out.println("=================================================");
-            }
-        } while ((choice != "2"));
+        menu.adminMenu();
+//        String choice = "a";
+//        Scanner input = new Scanner(System.in);
+//        do {
+//            System.out.println("Menu:");
+//            System.out.println("   1. Nhấn 1 để xem thông tin người mượn");
+//            System.out.println("   2. Nhấn 2 để xem kho sách");
+//            System.out.println("   3. Nhấn 3 để tìm sách");
+//            System.out.println("   4. Nhấn 4 để thêm sách");
+//            System.out.println("   5. Nhấn 5 để sửa thông tin sách");
+//            System.out.println("   6. Nhấn 6 để xóa sách");
+//            System.out.println("   7. Nhấn 7 để trở về Menu chính");
+//            System.out.println("=================================================");
+//            System.out.print("Nhập lựa chọn của bạn: ");
+//            choice = input.nextLine();
+//            switch (choice) {
+//                case "1":
+//                    readBorrowInformation();
+//                    break;
+//                case "2":
+//                    readBooks();
+//                    break;
+//                case "3":
+//                    searchBooks();
+//                    break;
+//                case "4":
+//                    addBook();
+//                    break;
+//                case "5":
+//                    fixBookInfo();
+//                    break;
+//                case "6":
+//                    DeleteBookInfo();
+//                    break;
+//                case  "7":
+//                    menu.mainMenu();
+//                    break;
+//                default:
+//                    System.out.println("Bạn nhập sai chức năng");
+//                    System.out.println("Bấm nút theo menu để tiêp tục");
+//                    System.out.println("=================================================");
+//            }
+//        } while ((choice != "2"));
     }
     public void readBorrowInformation() {
         BufferedReader br = null;
