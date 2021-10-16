@@ -54,7 +54,7 @@ public class Menu {
             choice = input.nextLine();
             switch (choice) {
                 case "1":
-                    admin.readBorrowInformation();
+                    admin.showSaleInfo();
                     break;
                 case "2":
                     admin.readBooks();
@@ -66,7 +66,7 @@ public class Menu {
                     admin.addBook();
                     break;
                 case "5":
-                    admin.fixBookInfo();
+                    admin.editBookInfo();
                     break;
                 case "6":
                     admin.DeleteBookInfo();

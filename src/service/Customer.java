@@ -2,11 +2,14 @@ package service;
 
 import model.Book;
 import model.CustomerInformation;
+import model.SaleInformation;
 import repository.BookRepository;
+import repository.InformationCustomerRepository;
 import writeReadFile.ReadWriteCSVFile;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +18,8 @@ public class Customer {
     public static Scanner input = new Scanner(System.in);
     private ReadWriteCSVFile readWriteCSVFile = new ReadWriteCSVFile();
     BookRepository bookRepository = new BookRepository();
-
+    InformationCustomerRepository informationCustomerRepository = new InformationCustomerRepository();
+//    Menu menu = new Menu();
     public void customerMenu() throws IOException {
         Menu menu = new Menu();
         menu.customerMenu();
@@ -26,85 +30,89 @@ public class Customer {
         for (int i = 0; i < books.size(); i++) {
             System.out.println(i+1+"."+books.get(i));
         }
-        confirmBuy(books);
+        chooseBookToBuy(books);
     }
 
     public void searchBooks() throws IOException {
+        Menu menu = new Menu();
         System.out.println("=================================================");
         System.out.print("Nhập sách bạn cần tìm: ");
         Scanner input = new Scanner(System.in);
         String searchCharacter = input.nextLine();
         ArrayList<Book> books = new ArrayList<Book>(bookRepository.getBooks());
         ArrayList<Book> bookAfterSearch = new ArrayList<>();
-        for (Book book: bookAfterSearch) {
+        for (Book book: books) {
             if (book.getName().contains(searchCharacter)) {
                 bookAfterSearch.add(book);
             }
         }
         if (bookAfterSearch.size() == 0) {
             System.out.println("Không có sách cần tìm khiếm.");
+            menu.customerMenu();
+
         } else {
             for (Book bookSearch: bookAfterSearch) {
                 System.out.println(bookSearch);
             }
+            chooseBookToBuy(bookAfterSearch);
         }
-        confirmBuy(bookAfterSearch);
     }
 
 
-    public void SaleBookInformation(Book book, CustomerInformation customer){
+    public void SaleBookInformation(SaleInformation saleInformation) throws IOException {
         Menu menu = new Menu();
-        String fileName = "src\\data\\SaleInformation.csv";
-        try{
-            BufferedReader br = new BufferedReader(new FileReader("src\\data\\SaleInformation.csv"));
-            FileWriter writer = new FileWriter(fileName,true);
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-            if(br.readLine()==null){
-                bufferedWriter.write(customer.getName());
-                bufferedWriter.write(";");
-                bufferedWriter.write(customer.getAddress());
-                bufferedWriter.write(";");
-                bufferedWriter.write(customer.getNumber());
-                bufferedWriter.write(";");
-                bufferedWriter.write(book.getName());
-                bufferedWriter.write(";");
-                bufferedWriter.write(book.getAuthor());
-                bufferedWriter.write(";");
-                String price = String.valueOf(book.getPrice());
-                bufferedWriter.write(price);
-                bufferedWriter.write(";");
-                bufferedWriter.write(customer.getDate());
-                System.out.println("Quý khách đã đặt sách thành công");
-                System.out.println("=================================================");
-            }
-            else{
-                bufferedWriter.write("\n");
-                bufferedWriter.write(customer.getName());
-                bufferedWriter.write(";");
-                bufferedWriter.write(customer.getAddress());
-                bufferedWriter.write(";");
-                bufferedWriter.write(customer.getNumber());
-                bufferedWriter.write(";");
-                bufferedWriter.write(book.getName());
-                bufferedWriter.write(";");
-                bufferedWriter.write(book.getAuthor());
-                bufferedWriter.write(";");
-                String price = String.valueOf(book.getPrice());
-                bufferedWriter.write(price);
-                bufferedWriter.write(";");
-                System.out.println("Quý khách đã đặt sách thành công");
-                System.out.println("=================================================");
-            }
-            bufferedWriter.close();
-            menu.customerMenu();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        informationCustomerRepository.insert(saleInformation);
+//        String fileName = "src\\data\\SaleInformation.csv";
+//        try{
+//            BufferedReader br = new BufferedReader(new FileReader("src\\data\\SaleInformation.csv"));
+//            FileWriter writer = new FileWriter(fileName,true);
+//            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+//            if(br.readLine()==null){
+//                bufferedWriter.write(customer.getName());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(customer.getAddress());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(customer.getNumber());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(book.getName());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(book.getAuthor());
+//                bufferedWriter.write(";");
+//                String price = String.valueOf(book.getPrice());
+//                bufferedWriter.write(price);
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(customer.getDate());
+//                System.out.println("Quý khách đã đặt sách thành công");
+//                System.out.println("=================================================");
+//            }
+//            else{
+//                bufferedWriter.write("\n");
+//                bufferedWriter.write(customer.getName());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(customer.getAddress());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(customer.getNumber());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(book.getName());
+//                bufferedWriter.write(";");
+//                bufferedWriter.write(book.getAuthor());
+//                bufferedWriter.write(";");
+//                String price = String.valueOf(book.getPrice());
+//                bufferedWriter.write(price);
+//                bufferedWriter.write(";");
+//                System.out.println("Quý khách đã đặt sách thành công");
+//                System.out.println("=================================================");
+//            }
+//            bufferedWriter.close();
+//            menu.customerMenu();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 
 
-    public void confirmBuy(ArrayList<Book> books) throws IOException {
+    public void chooseBookToBuy(ArrayList<Book> books) throws IOException {
         Menu menu = new Menu();
         String choice = "a";
         Scanner input = new Scanner(System.in);
@@ -135,7 +143,7 @@ public class Customer {
             for(int i=0;i<books.size();i++){
                 System.out.println((i+1)+". "+books.get(i));
             }
-            System.out.print("Nhập số thứ tự sách cần mượn :");
+            System.out.print("Nhập số thứ tự sách cần mua :");
             Scanner input = new Scanner(System.in);
             int inputIndexBook = input.nextInt();
             System.out.println("=================================================");
@@ -159,12 +167,12 @@ public class Customer {
 
     public void createCustomerInfo(Book book) throws IOException {
         String inputNameCustomer;
-        String inputAddressBorrow;
+        String inputAddressCustomer;
         String inputPhoneNumberCustomer;
         String dateBuy;
-        System.out.println("Sách mượn : "+ book.getName()+", tác giả : "+ book.getAuthor()+", giá tiền : "+ book.getPrice());
+        System.out.println("Sách mua : "+ book.getName()+", tác giả : "+ book.getAuthor()+", giá tiền : "+ book.getPrice());
         do {
-            System.out.print("Nhập tên người mượn : ");
+            System.out.print("Nhập tên người mua : ");
             inputNameCustomer = input.nextLine();
             if (!isFormatNameCustomer(inputNameCustomer)) {
                 System.out.println("Không đúng định dạng (Mẫu: Nguyen Van A)");
@@ -173,7 +181,7 @@ public class Customer {
 
 
         System.out.print("Nhập địa chỉ : ");
-        inputAddressBorrow = input.nextLine();
+        inputAddressCustomer = input.nextLine();
 
         do {
             System.out.print("Nhập số điện thoại : ");
@@ -186,11 +194,14 @@ public class Customer {
         dateBuy = String.valueOf(java.time.LocalDate.now());
 
         System.out.println("=================================================");
-        CustomerInformation customerInfo = new CustomerInformation(inputNameCustomer,inputAddressBorrow,inputPhoneNumberCustomer, dateBuy);
-        confirmBook(book,customerInfo);
+//        CustomerInformation customerInfo = new CustomerInformation(inputNameCustomer,inputAddressBorrow,inputPhoneNumberCustomer, dateBuy);
+//        confirmBook(book,customerInfo);
+        SaleInformation saleInformation = new SaleInformation(inputNameCustomer,inputAddressCustomer,
+                inputPhoneNumberCustomer, book.getName(), book.getAuthor(), book.getPrice(), dateBuy);
+        confirmBook(saleInformation);
     }
 
-    public void confirmBook(Book book,CustomerInformation customer) throws IOException {
+    public void confirmBook(SaleInformation saleInformation) throws IOException {
         Menu menu = new Menu();
         String choice = "a";
         Scanner input = new Scanner(System.in);
@@ -203,7 +214,7 @@ public class Customer {
             choice = input.nextLine();
             switch (choice) {
                 case "1":
-                    SaleBookInformation(book,customer);
+                    SaleBookInformation(saleInformation);
                     break;
                 case "2":
                     menu.customerMenu();
