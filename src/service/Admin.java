@@ -71,12 +71,20 @@ public class Admin {
 
 
     public void addBook() throws IOException {
+        String bookName;
+        String bookAuthor = null;
         System.out.println("=================================================");
         Scanner input = new Scanner(System.in);
         System.out.println("Mời bạn nhập tên sách : ");
-        String bookName = input.nextLine();
-        System.out.println("Mời bạn nhập tên tác giả : ");
-        String bookAuthor = input.nextLine();
+        bookName = input.nextLine();
+        while(bookName == "") {
+             System.out.println("Mời bạn nhập tên sách : ");
+             bookName = input.nextLine();
+        }
+       do {
+           System.out.println("Mời bạn nhập tên tác giả : ");
+           bookAuthor = input.nextLine();
+       } while (bookAuthor == "");
         System.out.println("Mời bạn nhập giá tiền : ");
         String bookPrice = input.nextLine();
         while(bookPrice.matches("[0-9]+") == false || bookPrice.length() < 4 || Long.valueOf(bookPrice) % 1000 != 0){
@@ -85,10 +93,38 @@ public class Admin {
             bookPrice = input.nextLine();
         }
         Book book = new Book(bookName, bookAuthor,Long.parseLong(bookPrice));
-        bookRepository.insert(book);
+        confirmBookAdd(book);
+//        bookRepository.insert(book);
         System.out.println("=================================================");
         System.out.println("Thêm sách thành công");
         System.out.println("=================================================");
+    }
+
+    public void confirmBookAdd(Book book) throws IOException {
+        Menu menu = new Menu();
+        String choice = "a";
+        Scanner input = new Scanner(System.in);
+        do {
+            System.out.println("Xác nhận:");
+            System.out.println("   1. Nhấn 1 để xác nhận thêm");
+            System.out.println("   2. Nhấn 2 để thoát");
+            System.out.println("=================================================");
+            System.out.print("Nhập lựa chọn của bạn: ");
+            choice = input.nextLine();
+            switch (choice) {
+                case "1":
+                    bookRepository.insert(book);
+                    menu.adminMenu();
+                    break;
+                case "2":
+                    menu.adminMenu();
+                    break;
+                default:
+                    System.out.println("Bạn nhập sai chức năng");
+                    System.out.println("Bấm nút theo menu để tiếp tục");
+                    System.out.println("=================================================");
+            }
+        } while (choice != "2");
     }
 
     public void searchBooks(){
@@ -252,7 +288,7 @@ public class Admin {
                     saveChangeAfterDelete(books);
                     break;
                 case "2":
-                    menu.customerMenu();
+                    menu.adminMenu();
                     break;
                 default:
                     System.out.println("Bạn nhập sai chức năng");
