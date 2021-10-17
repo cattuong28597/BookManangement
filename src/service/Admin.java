@@ -31,12 +31,6 @@ public class Admin {
         menu.adminMenu();
     }
     public void showSaleInfo() throws IOException {
-//        ArrayList<SaleInformation> saleInfo = new ArrayList<SaleInformation>(informationCustomerRepository.getInformation());
-//        for (int i = 0; i < saleInfo.size(); i++) {
-//            System.out.println(i+1+". "+saleInfo.get(i));
-//        }
-
-
         BufferedReader br = null;
         try {
             String line;
@@ -44,9 +38,11 @@ public class Admin {
             int count = 1;
             while ((line = br.readLine()) != null) {
                 List<String> bookLine = readWriteCSVFile.parseCsvLine(line);
-                Book book = new Book(bookLine.get(3),bookLine.get(4),Long.valueOf(bookLine.get(5)));
-                CustomerInformation customerInfo = new CustomerInformation(bookLine.get(0),bookLine.get(1),bookLine.get(2),bookLine.get(6));
-                readWriteCSVFile.PrintCustomerAndBook(book,customerInfo,count);
+                SaleInformation saleInformation = new SaleInformation(bookLine.get(0),bookLine.get(1),
+                        bookLine.get(2),bookLine.get(3),bookLine.get(4),
+                        Long.valueOf(bookLine.get(5)),bookLine.get(6));
+
+                readWriteCSVFile.PrintCustomerAndBook(saleInformation,count);
                 count ++;
             }
         } catch (IOException e) {
@@ -228,7 +224,7 @@ public class Admin {
                     saveChangeValueBookToCSV(books);
                     break;
                 case "2":
-                    menu.customerMenu();
+                    menu.adminMenu();
                     break;
                 default:
                     System.out.println("Bạn nhập sai chức năng");

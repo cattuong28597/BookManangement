@@ -61,53 +61,20 @@ public class Customer {
 
     public void SaleBookInformation(SaleInformation saleInformation) throws IOException {
         Menu menu = new Menu();
-        informationCustomerRepository.insert(saleInformation);
-//        String fileName = "src\\data\\SaleInformation.csv";
-//        try{
-//            BufferedReader br = new BufferedReader(new FileReader("src\\data\\SaleInformation.csv"));
-//            FileWriter writer = new FileWriter(fileName,true);
-//            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-//            if(br.readLine()==null){
-//                bufferedWriter.write(customer.getName());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(customer.getAddress());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(customer.getNumber());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(book.getName());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(book.getAuthor());
-//                bufferedWriter.write(";");
-//                String price = String.valueOf(book.getPrice());
-//                bufferedWriter.write(price);
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(customer.getDate());
-//                System.out.println("Quý khách đã đặt sách thành công");
-//                System.out.println("=================================================");
-//            }
-//            else{
-//                bufferedWriter.write("\n");
-//                bufferedWriter.write(customer.getName());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(customer.getAddress());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(customer.getNumber());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(book.getName());
-//                bufferedWriter.write(";");
-//                bufferedWriter.write(book.getAuthor());
-//                bufferedWriter.write(";");
-//                String price = String.valueOf(book.getPrice());
-//                bufferedWriter.write(price);
-//                bufferedWriter.write(";");
-//                System.out.println("Quý khách đã đặt sách thành công");
-//                System.out.println("=================================================");
-//            }
-//            bufferedWriter.close();
-//            menu.customerMenu();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        String filePath = "src/data/SaleInformation.csv";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            FileWriter writer = new FileWriter(filePath,true);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            if (br.readLine() != null) {
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.write(saleInformation.toString());
+            bufferedWriter.close();
+            menu.customerMenu();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -194,8 +161,6 @@ public class Customer {
         dateBuy = String.valueOf(java.time.LocalDate.now());
 
         System.out.println("=================================================");
-//        CustomerInformation customerInfo = new CustomerInformation(inputNameCustomer,inputAddressBorrow,inputPhoneNumberCustomer, dateBuy);
-//        confirmBook(book,customerInfo);
         SaleInformation saleInformation = new SaleInformation(inputNameCustomer,inputAddressCustomer,
                 inputPhoneNumberCustomer, book.getName(), book.getAuthor(), book.getPrice(), dateBuy);
         confirmBook(saleInformation);

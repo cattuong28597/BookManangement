@@ -2,6 +2,7 @@ package writeReadFile;
 
 import model.Book;
 import model.CustomerInformation;
+import model.SaleInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +27,14 @@ public class ReadWriteCSVFile {
                         ", giá sách:" + book.get(2));
     }
 
-    public void PrintCustomerAndBook(Book book, CustomerInformation customer, int index) {
+    public void PrintCustomerAndBook(SaleInformation saleInfo, int index) {
         System.out.println(
-                index + ". Tên khách hàng:'" + customer.getName() + '\'' +
-                        ", địa chỉ:'" + customer.getAddress() + '\'' +
-                        ", số điện thoại:'" + customer.getNumber()+ '\'' +
-                        ", tên sách:'" + book.getName()+ '\'' +
-                        ", tác giả:'" + book.getAuthor()+ '\'' +
-                        ", giá tiền:" + book.getPrice()+ ", ngày mua: "+customer.getDate()
+                index + ". Tên khách hàng:'" + saleInfo.getNameCustomer() + '\'' +
+                        ", địa chỉ:'" + saleInfo.getAddress() + '\'' +
+                        ", số điện thoại:'" + saleInfo.getPhoneNumber()+ '\'' +
+                        ", tên sách:'" + saleInfo.getNameBook()+ '\'' +
+                        ", tác giả:'" + saleInfo.getAuthor()+ '\'' +
+                        ", giá tiền:" + saleInfo.getPrice()+ ", ngày mua: "+saleInfo.getDate()
                 );
     }
 
