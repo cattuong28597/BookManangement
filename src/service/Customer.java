@@ -18,8 +18,8 @@ public class Customer {
     public static Scanner input = new Scanner(System.in);
     private ReadWriteCSVFile readWriteCSVFile = new ReadWriteCSVFile();
     BookRepository bookRepository = new BookRepository();
-    InformationCustomerRepository informationCustomerRepository = new InformationCustomerRepository();
-//    Menu menu = new Menu();
+//    InformationCustomerRepository informationCustomerRepository = new InformationCustomerRepository();
+
     public void customerMenu() throws IOException {
         Menu menu = new Menu();
         menu.customerMenu();
@@ -78,7 +78,6 @@ public class Customer {
     }
 
 
-
     public void chooseBookToBuy(ArrayList<Book> books) throws IOException {
         Menu menu = new Menu();
         String choice = "a";
@@ -106,16 +105,21 @@ public class Customer {
     }
 
     public void buyBook(ArrayList<Book> books) throws IOException {
-        if(books.size()!=0){
-            for(int i=0;i<books.size();i++){
-                System.out.println((i+1)+". "+books.get(i));
+        try {
+            if(books.size()!=0){
+                for(int i=0;i<books.size();i++){
+                    System.out.println((i+1)+". "+books.get(i));
+                }
+                System.out.print("Nhập số thứ tự sách cần mua :");
+                Scanner input = new Scanner(System.in);
+                int inputIndexBook = input.nextInt();
+                System.out.println("=================================================");
+                createCustomerInfo(books.get(inputIndexBook-1));
             }
-            System.out.print("Nhập số thứ tự sách cần mua :");
-            Scanner input = new Scanner(System.in);
-            int inputIndexBook = input.nextInt();
-            System.out.println("=================================================");
-            createCustomerInfo(books.get(inputIndexBook-1));
+        } catch (Exception e) {
+            System.out.println("Nhập lại số thứ tự sách cần mua");
         }
+
     }
 
     public boolean isFormatNameCustomer(String name) {

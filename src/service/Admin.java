@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Admin {
-    InformationCustomerRepository informationCustomerRepository = new InformationCustomerRepository();
+//    InformationCustomerRepository informationCustomerRepository = new InformationCustomerRepository();
     BookRepository bookRepository = new BookRepository();
     private ReadWriteCSVFile readWriteCSVFile = new ReadWriteCSVFile();
     public void checkAdmin() throws IOException {
@@ -190,8 +190,8 @@ public class Admin {
                 System.out.print("Nhập giá tiền : ");
                 String inputPrice = input2.nextLine();
                 while(inputPrice.matches("[0-9]+") == false || inputPrice.length() < 4 || Long.valueOf(inputPrice) % 1000 != 0){
-                    System.out.println("Xin ban vui long nhap lai so tien hop le");
-                    System.out.print("Vui long nhap so tien ");
+                    System.out.println("Xin bạn vui lòng nhập lại số tiền hợp lệ");
+                    System.out.print("Vui lòng nhập số tiền ");
                     inputPrice = input.nextLine();
                 }
                 listBook.get(index-1).setName(inputBookName);
